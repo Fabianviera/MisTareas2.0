@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v4
+        with:
+          ref: master
 
       - name: Crear Release en GitHub
         uses: softprops/action-gh-release@v2
