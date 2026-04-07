@@ -1,0 +1,34 @@
+# MisTareas 2.0
+users_data/
+installer/
+dist/
+build/
+
+# Byte-compiled
+__pycache__/
+*.py[cod]
+
+# PyInstaller
+*.spec
+
+# Distribution
+*.egg-info/
+*.egg
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Ruff
+.ruff_cache/
+
+# mypy
+.mypy_cache/
