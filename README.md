@@ -43,4 +43,4 @@ python main.py
 
 ## Autor
 
-Fabián Viera — 2026 · Versión beta 2.0
+Juan Fabián Viera Rosales — 2026 · Versión 2.0
