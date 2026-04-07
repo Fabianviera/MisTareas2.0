@@ -9,10 +9,11 @@ import data.task_store as task_store
 
 
 class MisTareasApp(ctk.CTk):
-    def __init__(self, nombre_usuario: str):
+    def __init__(self, nombre_usuario: str, clave: bytes = None):
         super().__init__()
 
         self._nombre_usuario     = nombre_usuario
+        self._clave              = clave
         self.title("MisTareas")
         self.geometry("430x932")
         self.minsize(320, 480)
@@ -104,7 +105,20 @@ class MisTareasApp(ctk.CTk):
             scrollbar_button_color=C["scroll"],
             scrollbar_button_hover_color=C["accent"]
         )
-        self._lista.pack(fill="both", expand=True, padx=12, pady=(0, 12))
+        self._lista.pack(fill="both", expand=True, padx=12, pady=(0, 0))
+
+        # ── Pie de la app ──
+        pie_app = ctk.CTkFrame(self, fg_color=C["header"], corner_radius=0, height=28)
+        pie_app.pack(fill="x", side="bottom")
+        pie_app.pack_propagate(False)
+        self._btn_usuario_pie = ctk.CTkButton(
+            pie_app, text=f"👤  Usuario activo: {self._nombre_usuario}",
+            font=ctk.CTkFont(size=11), text_color=C["text_muted"],
+            fg_color="transparent", hover_color=C["task_hover"],
+            anchor="center", height=28, corner_radius=0,
+            command=self._mostrar_selector_usuarios
+        )
+        self._btn_usuario_pie.pack(expand=True, fill="x")
 
     # ── Lógica de tareas ──────────────────────────────────────────────────────
 
@@ -707,14 +721,16 @@ class MisTareasApp(ctk.CTk):
         return ventana
 
     def _mostrar_acerca_de(self):
-        ventana = self._ventana_info("Acerca de MisTareas", 320, 200)
+        ventana = self._ventana_info("Acerca de MisTareas", 340, 240)
         ctk.CTkLabel(ventana, text="✓  MisTareas",
                      font=ctk.CTkFont(size=22, weight="bold"),
-                     text_color=C["accent"]).pack(pady=(28, 4))
-        ctk.CTkLabel(ventana, text="Creado por Fabián Viera",
+                     text_color=C["accent"]).pack(pady=(24, 4))
+        ctk.CTkLabel(ventana, text="Creado por Juan Fabián Viera Rosales · 2026",
                      font=ctk.CTkFont(size=13), text_color=C["text"]).pack()
-        ctk.CTkLabel(ventana, text="2026  ·  Versión 2.0  ·  Para uso no comercial",
-                     font=ctk.CTkFont(size=12), text_color=C["text_muted"]).pack(pady=(2, 20))
+        ctk.CTkLabel(ventana, text="fabianviera.r@gmail.com",
+                     font=ctk.CTkFont(size=12), text_color=C["accent"]).pack(pady=(2, 0))
+        ctk.CTkLabel(ventana, text="Versión 2.0  ·  Para uso no comercial",
+                     font=ctk.CTkFont(size=12), text_color=C["text_muted"]).pack(pady=(4, 20))
         ctk.CTkButton(ventana, text="Cerrar", width=100, height=34, corner_radius=10,
                       fg_color=C["accent"], hover_color=C["accent_hover"],
                       text_color="white", command=ventana.destroy).pack()
@@ -871,6 +887,119 @@ class MisTareasApp(ctk.CTk):
         self._guardar_tareas()
         self.destroy()
 
+    def _mostrar_selector_usuarios(self):
+        """Muestra un popup con la lista de usuarios registrados."""
+        import auth.store as auth_store
+
+        usuarios = auth_store.cargar_usuarios()
+        if not usuarios:
+            return
+
+        # Cerrar popup anterior si existe
+        if hasattr(self, "_popup_usuarios") and self._popup_usuarios.winfo_exists():
+            self._popup_usuarios.destroy()
+            return
+
+        popup = ctk.CTkToplevel(self)
+        popup.overrideredirect(True)
+        popup.configure(fg_color=C["bg"])
+        self._popup_usuarios = popup
+
+        # Posicionar centrado respecto a la ventana principal, encima del pie
+        self.update_idletasks()
+        ancho_popup = 220
+        alto_popup = 40 * len(usuarios) + 8
+        wx = self.winfo_rootx()
+        wy = self.winfo_rooty()
+        ww = self.winfo_width()
+        by = self._btn_usuario_pie.winfo_rooty()
+        px = wx + (ww - ancho_popup) // 2
+        py = by - alto_popup
+        popup.geometry(f"{ancho_popup}x{alto_popup}+{px}+{py}")
+
+        for u in usuarios:
+            nombre = u.get("nombre_usuario", "")
+            mostrar = u.get("nombre_mostrar", nombre)
+            es_activo = nombre == self._nombre_usuario
+
+            btn = ctk.CTkButton(
+                popup,
+                text=f"{'✓  ' if es_activo else '     '}{mostrar}  ({nombre})",
+                font=ctk.CTkFont(size=12, weight="bold" if es_activo else "normal"),
+                fg_color="transparent",
+                hover_color=C["task_hover"],
+                text_color=C["accent"] if es_activo else C["text"],
+                anchor="w", height=36, corner_radius=0,
+                command=lambda n=nombre: self._seleccionar_usuario(n, popup)
+            )
+            btn.pack(fill="x", padx=4, pady=(4 if u == usuarios[0] else 0, 0))
+
+        # Cerrar al hacer clic fuera
+        popup.bind("<FocusOut>", lambda e: popup.destroy() if popup.winfo_exists() else None)
+        popup.focus_set()
+
+    def _seleccionar_usuario(self, nombre_usuario: str, popup):
+        """Gestiona la selección de un usuario del popup."""
+        popup.destroy()
+        if nombre_usuario == self._nombre_usuario:
+            return
+        self._pedir_contrasena_y_cambiar(nombre_usuario)
+
+    def _pedir_contrasena_y_cambiar(self, nombre_usuario: str):
+        """Muestra un diálogo de contraseña y cambia al usuario indicado."""
+        import auth.store as auth_store
+        import auth.crypto as crypto
+
+        dialogo = ctk.CTkToplevel(self)
+        dialogo.title(f"Cambiar a {nombre_usuario}")
+        dialogo.geometry("320x200")
+        dialogo.resizable(False, False)
+        dialogo.configure(fg_color=C["bg"])
+        dialogo.grab_set()
+
+        # Centrar
+        self.update_idletasks()
+        x = self.winfo_rootx() + (self.winfo_width() - 320) // 2
+        y = self.winfo_rooty() + (self.winfo_height() - 200) // 2
+        dialogo.geometry(f"320x200+{x}+{y}")
+
+        ctk.CTkLabel(dialogo, text=f"Contraseña de «{nombre_usuario}»",
+                     font=ctk.CTkFont(size=14, weight="bold"),
+                     text_color=C["text"]).pack(pady=(24, 10))
+
+        ent_pass = ctk.CTkEntry(dialogo, show="•", placeholder_text="Contraseña",
+                                fg_color=C["input_bg"], border_color=C["border"],
+                                text_color=C["text"], height=40, corner_radius=10)
+        ent_pass.pack(fill="x", padx=24)
+        ent_pass.focus_set()
+
+        lbl_error = ctk.CTkLabel(dialogo, text="", font=ctk.CTkFont(size=11),
+                                 text_color=C["text_priority"])
+        lbl_error.pack(pady=(4, 0))
+
+        def intentar_cambio():
+            contrasena = ent_pass.get()
+            resultado = auth_store.autenticar(nombre_usuario, contrasena)
+            if resultado is None:
+                lbl_error.configure(text="Contraseña incorrecta.")
+                return
+            clave = crypto.derivar_clave(nombre_usuario, contrasena)
+            dialogo.destroy()
+            self._cambiar_a_usuario(nombre_usuario, clave)
+
+        ent_pass.bind("<Return>", lambda _: intentar_cambio())
+        ctk.CTkButton(dialogo, text="Entrar", height=38, corner_radius=10,
+                      fg_color=C["accent"], hover_color=C["accent_hover"],
+                      text_color="white", font=ctk.CTkFont(size=13),
+                      command=intentar_cambio).pack(fill="x", padx=24, pady=(8, 0))
+
+    def _cambiar_a_usuario(self, nombre_usuario: str, clave: bytes):
+        """Guarda las tareas actuales y abre la app con el nuevo usuario."""
+        self._guardar_tareas()
+        self.destroy()
+        app = MisTareasApp(nombre_usuario=nombre_usuario, clave=clave)
+        app.mainloop()
+
     def _cerrar_sesion(self):
         """Guarda las tareas, destruye la ventana y regresa al login."""
         self._guardar_tareas()
@@ -896,13 +1025,13 @@ class MisTareasApp(ctk.CTk):
 
     def _guardar_tareas(self):
         try:
-            task_store.guardar_tareas(self.tareas, self._nombre_usuario)
+            task_store.guardar_tareas(self.tareas, self._nombre_usuario, self._clave)
         except Exception as e:
             messagebox.showerror("MisTareas", f"Error al guardar las tareas:\n{e}")
 
     def _cargar_tareas(self):
         try:
-            self.tareas = task_store.cargar_tareas(self._nombre_usuario)
+            self.tareas = task_store.cargar_tareas(self._nombre_usuario, self._clave)
         except Exception as e:
             self.tareas = []
             messagebox.showerror(

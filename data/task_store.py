@@ -2,6 +2,8 @@ import os
 import re
 import json
 from config import DIR_BASE
+from auth.crypto import cifrar, descifrar
+from cryptography.fernet import InvalidToken
 
 
 def _sanitizar_usuario(nombre_usuario: str) -> str:
@@ -17,13 +19,20 @@ def obtener_archivo_tareas(nombre_usuario: str) -> str:
     return os.path.join(directorio_usuario, "tasks.json")
 
 
-def guardar_tareas(tareas: list, nombre_usuario: str) -> None:
-    """Guarda la lista de tareas del usuario con escritura atómica mediante .tmp."""
+def guardar_tareas(tareas: list, nombre_usuario: str, clave: bytes = None) -> None:
+    """Guarda la lista de tareas del usuario con escritura atómica mediante .tmp.
+    Si se proporciona una clave, el archivo se cifra con Fernet."""
     archivo = obtener_archivo_tareas(nombre_usuario)
     temporal = archivo + ".tmp"
     try:
-        with open(temporal, "w", encoding="utf-8") as f:
-            json.dump(tareas, f, ensure_ascii=False, indent=2)
+        contenido_json = json.dumps(tareas, ensure_ascii=False, indent=2)
+        if clave:
+            datos = cifrar(contenido_json, clave)
+            with open(temporal, "wb") as f:
+                f.write(datos)
+        else:
+            with open(temporal, "w", encoding="utf-8") as f:
+                f.write(contenido_json)
         os.replace(temporal, archivo)
     except Exception:
         try:
@@ -33,7 +42,7 @@ def guardar_tareas(tareas: list, nombre_usuario: str) -> None:
         raise
 
 
-def cargar_tareas(nombre_usuario: str) -> list:
+def cargar_tareas(nombre_usuario: str, clave: bytes = None) -> list:
     """
     Carga las tareas del usuario.
     Si el archivo de usuario no existe pero sí existe un tasks.json legado en la raíz,
@@ -61,11 +70,24 @@ def cargar_tareas(nombre_usuario: str) -> list:
 
     if os.path.exists(archivo):
         try:
-            with open(archivo, "r", encoding="utf-8") as f:
-                tareas = json.load(f)
+            if clave:
+                with open(archivo, "rb") as f:
+                    datos = f.read()
+                try:
+                    contenido = descifrar(datos, clave)
+                except (InvalidToken, Exception):
+                    # Compatibilidad: archivo antiguo en texto plano → migrar a cifrado
+                    contenido = datos.decode("utf-8")
+                tareas = json.loads(contenido)
+            else:
+                with open(archivo, "r", encoding="utf-8") as f:
+                    tareas = json.load(f)
             for t in tareas:
                 t.setdefault("priority",    False)
                 t.setdefault("priority_at", None)
+            # Si había datos en plano y ahora tenemos clave, re-guardar cifrado
+            if clave:
+                guardar_tareas(tareas, nombre_usuario, clave)
             return tareas
         except Exception:
             return []

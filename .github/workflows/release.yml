@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  crear-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Crear Release en GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "MisTareas 2.0 — ${{ github.ref_name }}"
+          body: |
+            ## MisTareas 2.0 — ${{ github.ref_name }}
+
+            ### Descargas
+
+            | Archivo | Descripción |
+            |---------|-------------|
+            | `Installer_MisTareas2.0.exe` | Instalador para Windows (recomendado) |
+            | `MisTareas2.0.exe` | Ejecutable portable (sin instalación) |
+
+            ### Instalación
+            1. Descarga el instalador `Installer_MisTareas2.0.exe`
+            2. Ejecuta el instalador y sigue los pasos
+            3. Abre MisTareas 2.0 desde el acceso directo del escritorio
+
+            ---
+            Creado por **Juan Fabián Viera Rosales** · [fabianviera.r@gmail.com](mailto:fabianviera.r@gmail.com)
+          draft: false
+          prerelease: false
+          files: |
+            installer/Installer_MisTareas2.0.exe
+            dist/MisTareas2.0.exe

@@ -5,6 +5,7 @@ from tkinter import messagebox
 
 from config import C
 import auth.store as auth_store
+import auth.crypto as crypto
 import data.task_store as task_store
 
 
@@ -256,7 +257,8 @@ class VentanaLogin(ctk.CTk):
             return
 
         nombre_usuario = resultado["nombre_usuario"]
-        self._lanzar_app(nombre_usuario)
+        clave = crypto.derivar_clave(nombre_usuario, contrasena)
+        self._lanzar_app(nombre_usuario, clave)
 
     # ── Registro ──────────────────────────────────────────────────────────────
 
@@ -293,6 +295,7 @@ class VentanaLogin(ctk.CTk):
             return
 
         nombre_usuario_lower = nombre_usuario.lower()
+        clave = crypto.derivar_clave(nombre_usuario_lower, contrasena)
 
         # Ofrecer migración de tareas legadas si las hay
         if task_store.hay_migracion_pendiente():
@@ -303,10 +306,10 @@ class VentanaLogin(ctk.CTk):
             )
             if respuesta:
                 tareas_legacy = task_store.obtener_tareas_migracion()
-                task_store.guardar_tareas(tareas_legacy, nombre_usuario_lower)
+                task_store.guardar_tareas(tareas_legacy, nombre_usuario_lower, clave)
             task_store.marcar_migracion_completada()
 
-        self._lanzar_app(nombre_usuario_lower)
+        self._lanzar_app(nombre_usuario_lower, clave)
 
     # ── Helpers ───────────────────────────────────────────────────────────────
 
@@ -318,9 +321,9 @@ class VentanaLogin(ctk.CTk):
         actual = entrada.cget("show")
         entrada.configure(show="" if actual else "•")
 
-    def _lanzar_app(self, nombre_usuario: str):
+    def _lanzar_app(self, nombre_usuario: str, clave: bytes):
         """Destruye la ventana de login y abre la ventana principal de la app."""
         self.destroy()
         from ui.main_window import MisTareasApp
-        app = MisTareasApp(nombre_usuario=nombre_usuario)
+        app = MisTareasApp(nombre_usuario=nombre_usuario, clave=clave)
         app.mainloop()
