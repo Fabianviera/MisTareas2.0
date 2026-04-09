@@ -36,22 +36,35 @@ Filename: "{app}\MisTareas2.1.exe"; Description: "Abrir MisTareas 2.0 ahora"; Fl
 
 [Code]
 
+const
+  UNINSTALL_KEY = 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{F7A3B8C2-9D4E-4F1A-8B3C-1D2E3F4A5B6C}_is1';
+
 { Devuelve la cadena de desinstalación del registro, o vacía si no hay instalación previa }
 function ObtenerCadenaDesinstalacion(): String;
 var
-  sRuta: String;
   sValor: String;
 begin
-  sRuta := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{F7A3B8C2-9D4E-4F1A-8B3C-1D2E3F4A5B6C}_is1';
   sValor := '';
-  if not RegQueryStringValue(HKLM, sRuta, 'UninstallString', sValor) then
-    RegQueryStringValue(HKCU, sRuta, 'UninstallString', sValor);
+  if not RegQueryStringValue(HKLM, UNINSTALL_KEY, 'UninstallString', sValor) then
+    RegQueryStringValue(HKCU, UNINSTALL_KEY, 'UninstallString', sValor);
+  Result := sValor;
+end;
+
+{ Devuelve la carpeta de instalación desde el registro }
+function ObtenerCarpetaInstalacion(): String;
+var
+  sValor: String;
+begin
+  sValor := '';
+  if not RegQueryStringValue(HKLM, UNINSTALL_KEY, 'InstallLocation', sValor) then
+    RegQueryStringValue(HKCU, UNINSTALL_KEY, 'InstallLocation', sValor);
   Result := sValor;
 end;
 
 function InitializeSetup(): Boolean;
 var
   sCadena: String;
+  sCarpeta: String;
   iResultado: Integer;
   iOpcion: Integer;
   aEtiquetas: TArrayOfString;
@@ -86,12 +99,30 @@ begin
   end
   else if iOpcion = IDNO then
   begin
-    { Eliminar: desinstalar y salir }
+    { Eliminar: pedir confirmación }
     if MsgBox(
       '¿Confirmas que quieres eliminar MisTareas del equipo?',
       mbConfirmation, MB_YESNO
     ) = IDYES then
+    begin
+      { Leer carpeta antes de desinstalar (el registro desaparece tras la desinstalación) }
+      sCarpeta := ObtenerCarpetaInstalacion();
+
+      { Desinstalar la aplicación }
       Exec(RemoveQuotes(sCadena), '/SILENT', '', SW_HIDE, ewWaitUntilTerminated, iResultado);
+
+      { Preguntar si también se quieren borrar los datos de usuario }
+      if (sCarpeta <> '') and DirExists(sCarpeta + '\users_data') then
+      begin
+        if MsgBox(
+          '¿Deseas eliminar también todos los datos de usuario?' + #13#10 +
+          '(tareas guardadas, cuentas y configuración)' + #13#10 + #13#10 +
+          'Esta acción no se puede deshacer.',
+          mbConfirmation, MB_YESNO
+        ) = IDYES then
+          DelTree(sCarpeta + '\users_data', True, True, True);
+      end;
+    end;
     Result := False;
   end
   else
