@@ -9,7 +9,7 @@
 - **Botón «← Ya tengo cuenta»** siempre visible en la pantalla de creación de cuenta
 
 ### Mejorado
-- «v2.0» visible en el pie de la ventana de login y de la ventana principal
+- «v2.1» visible en el pie de la ventana de login y de la ventana principal
 - Código de internacionalización centralizado en `lang.py`
 
 ---

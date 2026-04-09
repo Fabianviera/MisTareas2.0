@@ -199,7 +199,7 @@ class VentanaLogin(ctk.CTk):
         pie.pack(fill="x", side="bottom")
         pie.pack_propagate(False)
         ctk.CTkLabel(
-            pie, text="v2.0",
+            pie, text="v2.1",
             font=ctk.CTkFont(size=10), text_color=C["text_muted"]
         ).pack(expand=True)
 

@@ -1,6 +1,6 @@
-# MisTareas 2.0
+# MisTareas 2.1
 
-**MisTareas 2.0** es una aplicación de escritorio multi-usuario para gestionar listas de tareas, desarrollada en Python con CustomTkinter.
+**MisTareas 2.1** es una aplicación de escritorio multi-usuario para gestionar listas de tareas, desarrollada en Python con CustomTkinter.
 
 ## Características principales
 
@@ -24,7 +24,7 @@
 
 ## Novedades respecto a la versión 1.0
 
-| Funcionalidad | v1.0 | v2.0 |
+| Funcionalidad | v1.0 | v2.1 |
 |---|---|---|
 | Multi-usuario | No | Sí |
 | Pantalla de login | No | Sí |

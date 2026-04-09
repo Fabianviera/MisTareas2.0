@@ -113,7 +113,7 @@ class MisTareasApp(ctk.CTk):
         pie_app.pack(fill="x", side="bottom")
         pie_app.pack_propagate(False)
         ctk.CTkLabel(
-            pie_app, text="v2.0",
+            pie_app, text="v2.1",
             font=ctk.CTkFont(size=10), text_color=C["text_muted"]
         ).pack(side="right", padx=10)
         self._btn_usuario_pie = ctk.CTkButton(

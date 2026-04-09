@@ -4,14 +4,14 @@
 
 | Archivo | Descripción | Enlace |
 |---------|-------------|--------|
-| `Installer_MisTareas2.1.exe` | Instalador para Windows (recomendado) | [Descargar](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/Installer_MisTareas2.0.exe) |
-| `MisTareas2.1.exe` | Ejecutable portable (sin instalación) | [Descargar](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.0.exe) |
+| `Installer_MisTareas2.1.exe` | Instalador para Windows (recomendado) | [Descargar](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/Installer_MisTareas2.1.exe) |
+| `MisTareas2.1.exe` | Ejecutable portable (sin instalación) | [Descargar](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.1.exe) |
 
 ## Windows
 
 ### Opción 1 — Instalador (recomendado)
 
-1. Descarga `Installer_MisTareas2.0.exe` desde la tabla anterior o desde la sección [Releases](https://github.com/Fabianviera/MisTareas2.0/releases)
+1. Descarga `Installer_MisTareas2.1.exe` desde la tabla anterior o desde la sección [Releases](https://github.com/Fabianviera/MisTareas2.0/releases)
 2. Ejecuta el instalador y sigue el asistente
 3. Se creará acceso directo en el escritorio y en el menú inicio
 
