@@ -28,11 +28,11 @@ jobs:
 
             | Archivo | Descripción |
             |---------|-------------|
-            | `Installer_MisTareas2.0.exe` | Instalador para Windows (recomendado) |
-            | `MisTareas2.0.exe` | Ejecutable portable (sin instalación) |
+            | `Installer_MisTareas2.1.exe` | Instalador para Windows (recomendado) |
+            | `MisTareas2.1.exe` | Ejecutable portable (sin instalación) |
 
             ### Instalación
-            1. Descarga el instalador `Installer_MisTareas2.0.exe`
+            1. Descarga el instalador `Installer_MisTareas2.1.exe`
             2. Ejecuta el instalador y sigue los pasos
             3. Abre MisTareas 2.0 desde el acceso directo del escritorio
 
@@ -41,5 +41,5 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            installer/Installer_MisTareas2.0.exe
-            dist/MisTareas2.0.exe
+            installer/Installer_MisTareas2.1.exe
+            dist/MisTareas2.1.exe

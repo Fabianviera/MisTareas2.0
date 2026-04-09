@@ -19,8 +19,8 @@
 
 | Archivo | Descripción |
 |---------|-------------|
-| [Installer_MisTareas2.0.exe](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/Installer_MisTareas2.0.exe) | Instalador para Windows (recomendado) |
-| [MisTareas2.0.exe](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.0.exe) | Ejecutable portable (sin instalación) |
+| [Installer_MisTareas2.1.exe](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/Installer_MisTareas2.1.exe) | Instalador para Windows (recomendado) |
+| [MisTareas2.1.exe](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.1.exe) | Ejecutable portable (sin instalación) |
 
 ## Novedades respecto a la versión 1.0
 
