@@ -5,6 +5,7 @@ import sys
 import os
 
 from config import C, _ahora
+from lang import T, set_lang, get_lang
 import data.task_store as task_store
 
 
@@ -14,7 +15,7 @@ class MisTareasApp(ctk.CTk):
 
         self._nombre_usuario     = nombre_usuario
         self._clave              = clave
-        self.title("MisTareas")
+        self.title(T["app_title"])
         self.geometry("430x932")
         self.minsize(320, 480)
         self.configure(fg_color=C["bg"])
@@ -75,7 +76,7 @@ class MisTareasApp(ctk.CTk):
 
         self._entrada = ctk.CTkEntry(
             fila_entrada,
-            placeholder_text="Añadir nueva tarea…",
+            placeholder_text=T["ph_add_task"],
             fg_color=C["input_bg"], border_color=C["border"],
             text_color=C["text"], placeholder_text_color=C["text_muted"],
             height=46, corner_radius=14, font=ctk.CTkFont(size=14)
@@ -111,8 +112,12 @@ class MisTareasApp(ctk.CTk):
         pie_app = ctk.CTkFrame(self, fg_color=C["header"], corner_radius=0, height=28)
         pie_app.pack(fill="x", side="bottom")
         pie_app.pack_propagate(False)
+        ctk.CTkLabel(
+            pie_app, text="v2.0",
+            font=ctk.CTkFont(size=10), text_color=C["text_muted"]
+        ).pack(side="right", padx=10)
         self._btn_usuario_pie = ctk.CTkButton(
-            pie_app, text=f"👤  Usuario activo: {self._nombre_usuario}",
+            pie_app, text=T["footer_user"].format(self._nombre_usuario),
             font=ctk.CTkFont(size=11), text_color=C["text_muted"],
             fg_color="transparent", hover_color=C["task_hover"],
             anchor="center", height=28, corner_radius=0,
@@ -127,7 +132,7 @@ class MisTareasApp(ctk.CTk):
         if not texto:
             return
         if len(texto) > 200:
-            messagebox.showwarning("MisTareas", "El texto no puede superar los 200 caracteres.")
+            messagebox.showwarning(T["app_title"], T["warn_task_long"])
             return
         self.tareas.append({
             "text": texto, "done": False,
@@ -506,7 +511,7 @@ class MisTareasApp(ctk.CTk):
         if not self.tareas:
             ctk.CTkLabel(
                 self._lista,
-                text="Sin tareas por el momento.\n¡Añade una arriba!",
+                text=T["empty_state"],
                 font=ctk.CTkFont(size=14),
                 text_color=C["text_muted"]
             ).pack(pady=50)
@@ -586,9 +591,9 @@ class MisTareasApp(ctk.CTk):
         creada   = tarea.get("created_at", "")
         hecha_el = tarea.get("done_at", "")
         if creada:
-            marca_tiempo = f"🕐 Creada: {creada}"
+            marca_tiempo = T["ts_created"].format(creada)
             if hecha_el:
-                marca_tiempo += f"   ✅ Hecha: {hecha_el}"
+                marca_tiempo += T["ts_done"].format(hecha_el)
             ctk.CTkLabel(
                 info, text=marca_tiempo,
                 font=ctk.CTkFont(size=10),
@@ -600,9 +605,14 @@ class MisTareasApp(ctk.CTk):
         hechas       = sum(1 for t in self.tareas if t["done"])
         prioritarias = sum(1 for t in self.tareas if t.get("priority"))
         if total:
-            texto = f"{hechas} de {total} completada{'s' if total != 1 else ''}"
-            if prioritarias:
-                texto += f"  ·  {prioritarias} prioritaria{'s' if prioritarias != 1 else ''}"
+            if get_lang() == "en":
+                texto = f"{hechas} of {total} completed"
+                if prioritarias:
+                    texto += f"  ·  {prioritarias} {'priority' if prioritarias == 1 else 'priorities'}"
+            else:
+                texto = f"{hechas} de {total} completada{'s' if total != 1 else ''}"
+                if prioritarias:
+                    texto += f"  ·  {prioritarias} prioritaria{'s' if prioritarias != 1 else ''}"
         else:
             texto = ""
         self._contador.configure(text=texto)
@@ -615,40 +625,46 @@ class MisTareasApp(ctk.CTk):
         if sys.platform == "darwin":
             menu_app = tk.Menu(barra_menus, name="apple", tearoff=False)
             barra_menus.add_cascade(label="MisTareas", menu=menu_app)
-            menu_app.add_command(label="Acerca de MisTareas", command=self._mostrar_acerca_de)
+            menu_app.add_command(label=T["menu_about"],  command=self._mostrar_acerca_de)
             menu_app.add_separator()
-            menu_app.add_command(label="Cerrar sesión", command=self._cerrar_sesion)
+            menu_app.add_command(label=T["menu_logout"], command=self._cerrar_sesion)
             menu_app.add_separator()
-            menu_app.add_command(label="Salir", command=self._salir, accelerator="Cmd+Q")
+            menu_app.add_command(label=T["menu_quit"],   command=self._salir, accelerator="Cmd+Q")
 
             menu_tareas = tk.Menu(barra_menus, tearoff=False)
-            barra_menus.add_cascade(label="Tareas", menu=menu_tareas)
-            menu_tareas.add_command(label="Borrar completadas", command=self._borrar_completadas)
-            menu_tareas.add_command(label="Borrar todas",       command=self._borrar_todas)
+            barra_menus.add_cascade(label=T["menu_tasks"], menu=menu_tareas)
+            menu_tareas.add_command(label=T["menu_clear_done"], command=self._borrar_completadas)
+            menu_tareas.add_command(label=T["menu_clear_all"],  command=self._borrar_todas)
 
             menu_ayuda = tk.Menu(barra_menus, tearoff=False)
-            barra_menus.add_cascade(label="Ayuda", menu=menu_ayuda)
-            menu_ayuda.add_command(label="Ayuda de MisTareas", command=self._mostrar_ayuda)
-            menu_ayuda.add_command(label="Licencia",            command=self._mostrar_licencia)
+            barra_menus.add_cascade(label=T["menu_help"], menu=menu_ayuda)
+            menu_ayuda.add_command(label=T["menu_help_item"], command=self._mostrar_ayuda)
+            menu_ayuda.add_command(label=T["menu_license"],   command=self._mostrar_licencia)
 
         else:
             menu_archivo = tk.Menu(barra_menus, tearoff=False)
-            barra_menus.add_cascade(label="Archivo", menu=menu_archivo)
-            menu_archivo.add_command(label="Cerrar sesión", command=self._cerrar_sesion)
+            barra_menus.add_cascade(label=T["menu_file"], menu=menu_archivo)
+            menu_archivo.add_command(label=T["menu_logout"], command=self._cerrar_sesion)
             menu_archivo.add_separator()
-            menu_archivo.add_command(label="Salir", command=self._salir, accelerator="Ctrl+Q")
+            menu_archivo.add_command(label=T["menu_quit"], command=self._salir, accelerator="Ctrl+Q")
 
             menu_tareas = tk.Menu(barra_menus, tearoff=False)
-            barra_menus.add_cascade(label="Tareas", menu=menu_tareas)
-            menu_tareas.add_command(label="Borrar completadas", command=self._borrar_completadas)
-            menu_tareas.add_command(label="Borrar todas",       command=self._borrar_todas)
+            barra_menus.add_cascade(label=T["menu_tasks"], menu=menu_tareas)
+            menu_tareas.add_command(label=T["menu_clear_done"], command=self._borrar_completadas)
+            menu_tareas.add_command(label=T["menu_clear_all"],  command=self._borrar_todas)
 
             menu_ayuda = tk.Menu(barra_menus, tearoff=False)
-            barra_menus.add_cascade(label="Ayuda", menu=menu_ayuda)
-            menu_ayuda.add_command(label="Ayuda de MisTareas", command=self._mostrar_ayuda)
+            barra_menus.add_cascade(label=T["menu_help"], menu=menu_ayuda)
+            menu_ayuda.add_command(label=T["menu_help_item"], command=self._mostrar_ayuda)
             menu_ayuda.add_separator()
-            menu_ayuda.add_command(label="Acerca de MisTareas", command=self._mostrar_acerca_de)
-            menu_ayuda.add_command(label="Licencia",            command=self._mostrar_licencia)
+            menu_ayuda.add_command(label=T["menu_about"],   command=self._mostrar_acerca_de)
+            menu_ayuda.add_command(label=T["menu_license"], command=self._mostrar_licencia)
+
+        # ── Menú Idioma / Language ──
+        menu_idioma = tk.Menu(barra_menus, tearoff=False)
+        barra_menus.add_cascade(label=T["menu_language"], menu=menu_idioma)
+        menu_idioma.add_command(label="🇪🇸  Español", command=lambda: self._cambiar_idioma("es"))
+        menu_idioma.add_command(label="🇬🇧  English", command=lambda: self._cambiar_idioma("en"))
 
         self.config(menu=barra_menus)
 
@@ -690,8 +706,8 @@ class MisTareasApp(ctk.CTk):
         ctk.CTkFrame(menu, fg_color=C["border"], height=1).pack(fill="x", pady=(0, 4))
 
         for label, cmd in [
-            ("🗑   Borrar completadas", self._borrar_completadas),
-            ("🗑   Borrar todas",        self._borrar_todas),
+            (T["ctx_clear_done"], self._borrar_completadas),
+            (T["ctx_clear_all"],  self._borrar_todas),
         ]:
             def _action(c=cmd):
                 close_menu()
@@ -721,23 +737,23 @@ class MisTareasApp(ctk.CTk):
         return ventana
 
     def _mostrar_acerca_de(self):
-        ventana = self._ventana_info("Acerca de MisTareas", 340, 240)
+        ventana = self._ventana_info(T["about_title"], 340, 240)
         ctk.CTkLabel(ventana, text="✓  MisTareas",
                      font=ctk.CTkFont(size=22, weight="bold"),
                      text_color=C["accent"]).pack(pady=(24, 4))
-        ctk.CTkLabel(ventana, text="Creado por Juan Fabián Viera Rosales · 2026",
+        ctk.CTkLabel(ventana, text=T["about_created"],
                      font=ctk.CTkFont(size=13), text_color=C["text"]).pack()
         ctk.CTkLabel(ventana, text="fabianviera.r@gmail.com",
                      font=ctk.CTkFont(size=12), text_color=C["accent"]).pack(pady=(2, 0))
-        ctk.CTkLabel(ventana, text="Versión 2.0  ·  Para uso no comercial",
+        ctk.CTkLabel(ventana, text=T["about_version"],
                      font=ctk.CTkFont(size=12), text_color=C["text_muted"]).pack(pady=(4, 20))
-        ctk.CTkButton(ventana, text="Cerrar", width=100, height=34, corner_radius=10,
+        ctk.CTkButton(ventana, text=T["btn_close"], width=100, height=34, corner_radius=10,
                       fg_color=C["accent"], hover_color=C["accent_hover"],
                       text_color="white", command=ventana.destroy).pack()
 
     def _mostrar_licencia(self):
-        ventana = self._ventana_info("Licencia", 560, 440)
-        ctk.CTkLabel(ventana, text="Licencia — GNU General Public License v3",
+        ventana = self._ventana_info(T["license_title"], 560, 440)
+        ctk.CTkLabel(ventana, text=T["license_header"],
                      font=ctk.CTkFont(size=14, weight="bold"),
                      text_color=C["accent"]).pack(pady=(16, 8), padx=16)
 
@@ -757,18 +773,18 @@ class MisTareasApp(ctk.CTk):
         else:
             box.insert("end", "GNU General Public License v3\n\nhttps://www.gnu.org/licenses/gpl-3.0.html")
         box.configure(state="disabled")
-        ctk.CTkButton(ventana, text="Cerrar", width=100, height=34, corner_radius=10,
+        ctk.CTkButton(ventana, text=T["btn_close"], width=100, height=34, corner_radius=10,
                       fg_color=C["accent"], hover_color=C["accent_hover"],
                       text_color="white", command=ventana.destroy).pack(pady=(0, 16))
 
     def _mostrar_ayuda(self):
-        ventana = self._ventana_info("Ayuda — MisTareas", 520, 620)
+        ventana = self._ventana_info(T["help_title"], 520, 620)
 
         cabecera = ctk.CTkFrame(ventana, fg_color=C["accent"], corner_radius=0, height=68)
         cabecera.pack(fill="x")
         cabecera.pack_propagate(False)
         ctk.CTkLabel(
-            cabecera, text="✓  MisTareas  —  Guía rápida",
+            cabecera, text=T["help_header"],
             font=ctk.CTkFont(size=18, weight="bold"),
             text_color="white"
         ).pack(expand=True)
@@ -810,38 +826,38 @@ class MisTareasApp(ctk.CTk):
                 ).pack(side="left", fill="x", expand=True)
             ctk.CTkFrame(tarjeta, fg_color="transparent", height=6).pack()
 
-        seccion("📝", "Crear una tarea", "#5B9BD5", [
-            ("+",  "Escribe el texto en el campo superior."),
-            ("↵",  "Pulsa [+] o la tecla Enter para añadirla."),
+        seccion("📝", T["help_s1_title"], "#5B9BD5", [
+            ("+",  T["help_s1_1"]),
+            ("↵",  T["help_s1_2"]),
         ])
-        seccion("✅", "Completar y descompletar", "#27AE60", [
-            ("☑",  "Haz clic en el checkbox (☐) para marcarla como hecha."),
-            ("↩",  "Vuelve a hacer clic para desmarcarla."),
-            ("🕐", "Se registra la fecha y hora de creación y de finalización."),
+        seccion("✅", T["help_s2_title"], "#27AE60", [
+            ("☑",  T["help_s2_1"]),
+            ("↩",  T["help_s2_2"]),
+            ("🕐", T["help_s2_3"]),
         ])
-        seccion("⭐", "Tareas prioritarias", "#E67E22", [
-            ("☆",  "Pulsa la estrella (☆) para marcarla como prioritaria."),
-            ("⬆",  "Las tareas prioritarias suben al inicio de la lista."),
-            ("★",  "Pulsa [★] de nuevo para quitar la prioridad."),
-            ("ℹ",  "Al completar una tarea prioritaria, pierde la prioridad."),
+        seccion("⭐", T["help_s3_title"], "#E67E22", [
+            ("☆",  T["help_s3_1"]),
+            ("⬆",  T["help_s3_2"]),
+            ("★",  T["help_s3_3"]),
+            ("ℹ",  T["help_s3_4"]),
         ])
-        seccion("↕", "Ordenar tareas", "#8E44AD", [
-            ("≡",  "Arrastra el icono [≡] para reordenar con el ratón."),
-            ("↑↓", "Selecciona una tarea y usa ↑ ↓ para moverla con el teclado."),
-            ("⚠",  "Solo puedes mover tareas dentro de su sección."),
+        seccion("↕", T["help_s4_title"], "#8E44AD", [
+            ("≡",  T["help_s4_1"]),
+            ("↑↓", T["help_s4_2"]),
+            ("⚠",  T["help_s4_3"]),
         ])
-        seccion("🗑", "Eliminar tareas", "#C0392B", [
-            ("✕",  "Pulsa [✕] en la fila para eliminar esa tarea."),
-            ("⋮",  "Menú [⋮] → «Borrar completadas» para limpiar las tareas hechas."),
-            ("⚠",  "«Borrar todas» elimina toda la lista sin posibilidad de recuperación."),
+        seccion("🗑", T["help_s5_title"], "#C0392B", [
+            ("✕",  T["help_s5_1"]),
+            ("⋮",  T["help_s5_2"]),
+            ("⚠",  T["help_s5_3"]),
         ])
-        seccion("📌", "Fijar la ventana", "#2980B9", [
-            ("📌", "El botón [📌] mantiene la ventana siempre encima de las demás apps."),
-            ("📍", "Al activarse cambia a [📍] con fondo azul. Pulsa de nuevo para desactivarlo."),
+        seccion("📌", T["help_s6_title"], "#2980B9", [
+            ("📌", T["help_s6_1"]),
+            ("📍", T["help_s6_2"]),
         ])
-        seccion("👤", "Cuentas de usuario", "#27AE60", [
-            ("↩",  "Menú Archivo → «Cerrar sesión» para cambiar de cuenta."),
-            ("🔒", "Cada usuario tiene sus propias tareas guardadas de forma segura."),
+        seccion("👤", T["help_s7_title"], "#27AE60", [
+            ("↩",  T["help_s7_1"]),
+            ("🔒", T["help_s7_2"]),
         ])
 
         ctk.CTkFrame(desplazable, fg_color="transparent", height=8).pack()
@@ -850,11 +866,11 @@ class MisTareasApp(ctk.CTk):
         pie.pack(fill="x", side="bottom")
         pie.pack_propagate(False)
         ctk.CTkLabel(
-            pie, text="Fabián Viera · 2026 · Versión 2.0",
+            pie, text=T["help_footer"],
             font=ctk.CTkFont(size=11), text_color=C["text_muted"]
         ).pack(side="left", padx=16, expand=True)
         ctk.CTkButton(
-            pie, text="Cerrar", width=90, height=34, corner_radius=10,
+            pie, text=T["btn_close"], width=90, height=34, corner_radius=10,
             fg_color=C["accent"], hover_color=C["accent_hover"],
             text_color="white", font=ctk.CTkFont(size=13),
             command=ventana.destroy
@@ -865,9 +881,9 @@ class MisTareasApp(ctk.CTk):
     def _borrar_completadas(self):
         cantidad = sum(1 for t in self.tareas if t["done"])
         if cantidad == 0:
-            messagebox.showinfo("MisTareas", "No hay tareas completadas.")
+            messagebox.showinfo(T["app_title"], T["info_no_done"])
             return
-        if messagebox.askyesno("Confirmar", f"¿Borrar {cantidad} tarea(s) completada(s)?"):
+        if messagebox.askyesno(T["confirm_title"], T["confirm_clear_done"].format(cantidad)):
             self.tareas        = [t for t in self.tareas if not t["done"]]
             self._seleccionada = None
             self._guardar_tareas()
@@ -875,9 +891,9 @@ class MisTareasApp(ctk.CTk):
 
     def _borrar_todas(self):
         if not self.tareas:
-            messagebox.showinfo("MisTareas", "No hay tareas.")
+            messagebox.showinfo(T["app_title"], T["info_no_tasks"])
             return
-        if messagebox.askyesno("Confirmar", f"¿Borrar las {len(self.tareas)} tarea(s)?"):
+        if messagebox.askyesno(T["confirm_title"], T["confirm_clear_all"].format(len(self.tareas))):
             self.tareas        = []
             self._seleccionada = None
             self._guardar_tareas()
@@ -951,7 +967,7 @@ class MisTareasApp(ctk.CTk):
         import auth.crypto as crypto
 
         dialogo = ctk.CTkToplevel(self)
-        dialogo.title(f"Cambiar a {nombre_usuario}")
+        dialogo.title(T["switch_title"].format(nombre_usuario))
         dialogo.geometry("320x200")
         dialogo.resizable(False, False)
         dialogo.configure(fg_color=C["bg"])
@@ -963,11 +979,11 @@ class MisTareasApp(ctk.CTk):
         y = self.winfo_rooty() + (self.winfo_height() - 200) // 2
         dialogo.geometry(f"320x200+{x}+{y}")
 
-        ctk.CTkLabel(dialogo, text=f"Contraseña de «{nombre_usuario}»",
+        ctk.CTkLabel(dialogo, text=T["switch_password_lbl"].format(nombre_usuario),
                      font=ctk.CTkFont(size=14, weight="bold"),
                      text_color=C["text"]).pack(pady=(24, 10))
 
-        ent_pass = ctk.CTkEntry(dialogo, show="•", placeholder_text="Contraseña",
+        ent_pass = ctk.CTkEntry(dialogo, show="•", placeholder_text=T["ph_password"],
                                 fg_color=C["input_bg"], border_color=C["border"],
                                 text_color=C["text"], height=40, corner_radius=10)
         ent_pass.pack(fill="x", padx=24)
@@ -981,14 +997,14 @@ class MisTareasApp(ctk.CTk):
             contrasena = ent_pass.get()
             resultado = auth_store.autenticar(nombre_usuario, contrasena)
             if resultado is None:
-                lbl_error.configure(text="Contraseña incorrecta.")
+                lbl_error.configure(text=T["err_wrong_password"])
                 return
             clave = crypto.derivar_clave(nombre_usuario, contrasena)
             dialogo.destroy()
             self._cambiar_a_usuario(nombre_usuario, clave)
 
         ent_pass.bind("<Return>", lambda _: intentar_cambio())
-        ctk.CTkButton(dialogo, text="Entrar", height=38, corner_radius=10,
+        ctk.CTkButton(dialogo, text=T["btn_login"], height=38, corner_radius=10,
                       fg_color=C["accent"], hover_color=C["accent_hover"],
                       text_color="white", font=ctk.CTkFont(size=13),
                       command=intentar_cambio).pack(fill="x", padx=24, pady=(8, 0))
@@ -999,6 +1015,17 @@ class MisTareasApp(ctk.CTk):
         self.destroy()
         app = MisTareasApp(nombre_usuario=nombre_usuario, clave=clave)
         app.mainloop()
+
+    def _cambiar_idioma(self, lang: str):
+        """Guarda el idioma y reinicia la app para aplicarlo."""
+        if lang == get_lang():
+            return
+        set_lang(lang)
+        messagebox.showinfo(T["lang_restart_title"], T["lang_restart_msg"])
+        self._guardar_tareas()
+        self.destroy()
+        from ui.login_window import VentanaLogin
+        VentanaLogin().mainloop()
 
     def _cerrar_sesion(self):
         """Guarda las tareas, destruye la ventana y regresa al login."""
@@ -1027,15 +1054,11 @@ class MisTareasApp(ctk.CTk):
         try:
             task_store.guardar_tareas(self.tareas, self._nombre_usuario, self._clave)
         except Exception as e:
-            messagebox.showerror("MisTareas", f"Error al guardar las tareas:\n{e}")
+            messagebox.showerror(T["app_title"], T["err_save_tasks"].format(e))
 
     def _cargar_tareas(self):
         try:
             self.tareas = task_store.cargar_tareas(self._nombre_usuario, self._clave)
         except Exception as e:
             self.tareas = []
-            messagebox.showerror(
-                "MisTareas",
-                f"No se pudo leer el archivo de tareas.\n"
-                f"Se empezará con la lista vacía.\n\nDetalle: {e}"
-            )
+            messagebox.showerror(T["app_title"], T["err_load_tasks"].format(e))

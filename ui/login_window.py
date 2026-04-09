@@ -4,44 +4,43 @@ import tkinter as tk
 from tkinter import messagebox
 
 from config import C
+from lang import T
 import auth.store as auth_store
 import auth.crypto as crypto
 import data.task_store as task_store
 
 
 class VentanaLogin(ctk.CTk):
-    """
-    Ventana de autenticación con dos estados:
-    - LOGIN: formulario de acceso con usuario y contraseña.
-    - REGISTRO: formulario de creación de cuenta nueva.
-    """
-
     _REGEX_USUARIO = re.compile(r'^[a-zA-Z0-9_-]+$')
 
     def __init__(self):
         super().__init__()
 
-        self.title("MisTareas — Acceder")
-        self.geometry("400x520")
+        self.title(T["login_title_window"])
         self.resizable(False, False)
         self.configure(fg_color=C["bg"])
 
-        # Centrar la ventana en pantalla
-        self.update_idletasks()
-        ancho_pantalla  = self.winfo_screenwidth()
-        alto_pantalla   = self.winfo_screenheight()
-        x = (ancho_pantalla  - 400) // 2
-        y = (alto_pantalla   - 520) // 2
-        self.geometry(f"400x520+{x}+{y}")
+        self._ancho  = 400
+        self._alto_login    = 520
+        self._alto_registro = 660
 
-        self._estado = "login"   # "login" | "registro"
+        self.update_idletasks()
+        ancho_pantalla = self.winfo_screenwidth()
+        alto_pantalla  = self.winfo_screenheight()
+        self._centrar(self._alto_login)
+
+        self._estado = "login"
         self._construir_ui()
+
+    def _centrar(self, alto: int):
+        self.update_idletasks()
+        x = (self.winfo_screenwidth()  - self._ancho) // 2
+        y = (self.winfo_screenheight() - alto) // 2
+        self.geometry(f"{self._ancho}x{alto}+{x}+{y}")
 
     # ── Construcción de la UI ─────────────────────────────────────────────────
 
     def _construir_ui(self):
-        """Construye todos los widgets. Se llama una sola vez."""
-
         # ── Cabecera ──
         cabecera = ctk.CTkFrame(self, fg_color=C["header"], corner_radius=0, height=72)
         cabecera.pack(fill="x")
@@ -56,9 +55,8 @@ class VentanaLogin(ctk.CTk):
         self._contenedor = ctk.CTkFrame(self, fg_color="transparent")
         self._contenedor.pack(fill="both", expand=True, padx=36, pady=20)
 
-        # Título del formulario
         self._lbl_titulo = ctk.CTkLabel(
-            self._contenedor, text="Iniciar sesión",
+            self._contenedor, text=T["login_title"],
             font=ctk.CTkFont(size=18, weight="bold"),
             text_color=C["text"]
         )
@@ -68,12 +66,11 @@ class VentanaLogin(ctk.CTk):
         self._frame_registro = ctk.CTkFrame(self._contenedor, fg_color="transparent")
 
         ctk.CTkLabel(
-            self._frame_registro, text="Nombre para mostrar",
+            self._frame_registro, text=T["lbl_display_name"],
             font=ctk.CTkFont(size=12), text_color=C["text_muted"], anchor="w"
         ).pack(fill="x", pady=(0, 2))
         self._ent_nombre_mostrar = ctk.CTkEntry(
-            self._frame_registro,
-            placeholder_text="Ej: Fabián",
+            self._frame_registro, placeholder_text=T["ph_display_name"],
             fg_color=C["input_bg"], border_color=C["border"],
             text_color=C["text"], placeholder_text_color=C["text_muted"],
             height=40, corner_radius=10
@@ -81,12 +78,11 @@ class VentanaLogin(ctk.CTk):
         self._ent_nombre_mostrar.pack(fill="x", pady=(0, 10))
 
         ctk.CTkLabel(
-            self._frame_registro, text="Usuario (letras, números, - y _)",
+            self._frame_registro, text=T["lbl_username_reg"],
             font=ctk.CTkFont(size=12), text_color=C["text_muted"], anchor="w"
         ).pack(fill="x", pady=(0, 2))
         self._ent_usuario_reg = ctk.CTkEntry(
-            self._frame_registro,
-            placeholder_text="Ej: fabian_viera",
+            self._frame_registro, placeholder_text=T["ph_username_reg"],
             fg_color=C["input_bg"], border_color=C["border"],
             text_color=C["text"], placeholder_text_color=C["text_muted"],
             height=40, corner_radius=10
@@ -94,14 +90,13 @@ class VentanaLogin(ctk.CTk):
         self._ent_usuario_reg.pack(fill="x", pady=(0, 10))
 
         ctk.CTkLabel(
-            self._frame_registro, text="Contraseña (mínimo 6 caracteres)",
+            self._frame_registro, text=T["lbl_password_reg"],
             font=ctk.CTkFont(size=12), text_color=C["text_muted"], anchor="w"
         ).pack(fill="x", pady=(0, 2))
         fila_pass_reg = ctk.CTkFrame(self._frame_registro, fg_color="transparent")
         fila_pass_reg.pack(fill="x", pady=(0, 10))
         self._ent_pass_reg = ctk.CTkEntry(
-            fila_pass_reg, show="•",
-            placeholder_text="Contraseña",
+            fila_pass_reg, show="•", placeholder_text=T["ph_password"],
             fg_color=C["input_bg"], border_color=C["border"],
             text_color=C["text"], placeholder_text_color=C["text_muted"],
             height=40, corner_radius=10
@@ -116,14 +111,13 @@ class VentanaLogin(ctk.CTk):
         self._btn_ver_pass_reg.pack(side="right")
 
         ctk.CTkLabel(
-            self._frame_registro, text="Confirmar contraseña",
+            self._frame_registro, text=T["lbl_confirm_password"],
             font=ctk.CTkFont(size=12), text_color=C["text_muted"], anchor="w"
         ).pack(fill="x", pady=(0, 2))
         fila_pass_conf = ctk.CTkFrame(self._frame_registro, fg_color="transparent")
         fila_pass_conf.pack(fill="x", pady=(0, 10))
         self._ent_pass_conf = ctk.CTkEntry(
-            fila_pass_conf, show="•",
-            placeholder_text="Repetir contraseña",
+            fila_pass_conf, show="•", placeholder_text=T["ph_confirm"],
             fg_color=C["input_bg"], border_color=C["border"],
             text_color=C["text"], placeholder_text_color=C["text_muted"],
             height=40, corner_radius=10
@@ -141,12 +135,11 @@ class VentanaLogin(ctk.CTk):
         self._frame_login = ctk.CTkFrame(self._contenedor, fg_color="transparent")
 
         ctk.CTkLabel(
-            self._frame_login, text="Usuario",
+            self._frame_login, text=T["lbl_username_login"],
             font=ctk.CTkFont(size=12), text_color=C["text_muted"], anchor="w"
         ).pack(fill="x", pady=(0, 2))
         self._ent_usuario_login = ctk.CTkEntry(
-            self._frame_login,
-            placeholder_text="Nombre de usuario",
+            self._frame_login, placeholder_text=T["ph_username_login"],
             fg_color=C["input_bg"], border_color=C["border"],
             text_color=C["text"], placeholder_text_color=C["text_muted"],
             height=40, corner_radius=10
@@ -154,14 +147,13 @@ class VentanaLogin(ctk.CTk):
         self._ent_usuario_login.pack(fill="x", pady=(0, 14))
 
         ctk.CTkLabel(
-            self._frame_login, text="Contraseña",
+            self._frame_login, text=T["lbl_password_login"],
             font=ctk.CTkFont(size=12), text_color=C["text_muted"], anchor="w"
         ).pack(fill="x", pady=(0, 2))
         fila_pass_login = ctk.CTkFrame(self._frame_login, fg_color="transparent")
         fila_pass_login.pack(fill="x", pady=(0, 14))
         self._ent_pass_login = ctk.CTkEntry(
-            fila_pass_login, show="•",
-            placeholder_text="Contraseña",
+            fila_pass_login, show="•", placeholder_text=T["ph_password"],
             fg_color=C["input_bg"], border_color=C["border"],
             text_color=C["text"], placeholder_text_color=C["text_muted"],
             height=40, corner_radius=10
@@ -178,7 +170,7 @@ class VentanaLogin(ctk.CTk):
 
         # ── Botón de acción principal ──
         self._btn_accion = ctk.CTkButton(
-            self._contenedor, text="Entrar",
+            self._contenedor, text=T["btn_login"],
             height=44, corner_radius=12,
             fg_color=C["accent"], hover_color=C["accent_hover"],
             text_color="white", font=ctk.CTkFont(size=15, weight="bold"),
@@ -186,7 +178,6 @@ class VentanaLogin(ctk.CTk):
         )
         self._btn_accion.pack(fill="x", pady=(4, 0))
 
-        # ── Mensaje de error / información ──
         self._lbl_error = ctk.CTkLabel(
             self._contenedor, text="",
             font=ctk.CTkFont(size=12),
@@ -194,9 +185,8 @@ class VentanaLogin(ctk.CTk):
         )
         self._lbl_error.pack(pady=(6, 0))
 
-        # ── Enlace para cambiar de estado ──
         self._btn_cambiar_estado = ctk.CTkButton(
-            self._contenedor, text="Crear cuenta nueva →",
+            self._contenedor, text=T["btn_new_account"],
             fg_color="transparent", hover_color=C["task_hover"],
             text_color=C["accent"], font=ctk.CTkFont(size=13, underline=True),
             height=32, corner_radius=8,
@@ -204,7 +194,15 @@ class VentanaLogin(ctk.CTk):
         )
         self._btn_cambiar_estado.pack(pady=(4, 0))
 
-        # Mostrar el formulario inicial
+        # ── Footer ──
+        pie = ctk.CTkFrame(self, fg_color=C["header"], corner_radius=0, height=24)
+        pie.pack(fill="x", side="bottom")
+        pie.pack_propagate(False)
+        ctk.CTkLabel(
+            pie, text="v2.0",
+            font=ctk.CTkFont(size=10), text_color=C["text_muted"]
+        ).pack(expand=True)
+
         self._mostrar_estado_login()
 
     # ── Cambio de estado ──────────────────────────────────────────────────────
@@ -212,19 +210,21 @@ class VentanaLogin(ctk.CTk):
     def _mostrar_estado_login(self):
         self._frame_registro.pack_forget()
         self._frame_login.pack(fill="x", before=self._btn_accion)
-        self._lbl_titulo.configure(text="Iniciar sesión")
-        self._btn_accion.configure(text="Entrar", command=self._intentar_login)
-        self._btn_cambiar_estado.configure(text="Crear cuenta nueva →")
+        self._lbl_titulo.configure(text=T["login_title"])
+        self._btn_accion.configure(text=T["btn_login"], command=self._intentar_login)
+        self._btn_cambiar_estado.configure(text=T["btn_new_account"])
         self._lbl_error.configure(text="")
+        self._centrar(self._alto_login)
         self._ent_usuario_login.focus_set()
 
     def _mostrar_estado_registro(self):
         self._frame_login.pack_forget()
         self._frame_registro.pack(fill="x", before=self._btn_accion)
-        self._lbl_titulo.configure(text="Crear cuenta")
-        self._btn_accion.configure(text="Registrarse", command=self._intentar_registro)
-        self._btn_cambiar_estado.configure(text="← Ya tengo cuenta")
+        self._lbl_titulo.configure(text=T["register_title"])
+        self._btn_accion.configure(text=T["btn_register"], command=self._intentar_registro)
+        self._btn_cambiar_estado.configure(text=T["btn_have_account"])
         self._lbl_error.configure(text="")
+        self._centrar(self._alto_registro)
         self._ent_nombre_mostrar.focus_set()
 
     def _cambiar_estado(self):
@@ -248,12 +248,12 @@ class VentanaLogin(ctk.CTk):
         contrasena = self._ent_pass_login.get()
 
         if not usuario or not contrasena:
-            self._mostrar_error("Por favor, rellena todos los campos.")
+            self._mostrar_error(T["err_fill_all"])
             return
 
         resultado = auth_store.autenticar(usuario, contrasena)
         if resultado is None:
-            self._mostrar_error("Usuario o contraseña incorrectos.")
+            self._mostrar_error(T["err_wrong_credentials"])
             return
 
         nombre_usuario = resultado["nombre_usuario"]
@@ -268,41 +268,33 @@ class VentanaLogin(ctk.CTk):
         contrasena      = self._ent_pass_reg.get()
         contrasena_conf = self._ent_pass_conf.get()
 
-        # Validaciones
         if not nombre_mostrar:
-            self._mostrar_error("El nombre para mostrar no puede estar vacío.")
+            self._mostrar_error(T["err_display_name"])
             return
-
         if not nombre_usuario:
-            self._mostrar_error("El nombre de usuario no puede estar vacío.")
+            self._mostrar_error(T["err_username_empty"])
             return
-
         if not self._REGEX_USUARIO.match(nombre_usuario):
-            self._mostrar_error("El usuario solo puede contener letras, números, - y _")
+            self._mostrar_error(T["err_username_invalid"])
             return
-
         if len(contrasena) < 6:
-            self._mostrar_error("La contraseña debe tener al menos 6 caracteres.")
+            self._mostrar_globo(self._ent_pass_reg, T["tip_password_short"])
             return
-
         if contrasena != contrasena_conf:
-            self._mostrar_error("Las contraseñas no coinciden.")
+            self._mostrar_globo(self._ent_pass_conf, T["tip_password_mismatch"])
             return
 
         creado = auth_store.crear_usuario(nombre_usuario, nombre_mostrar, contrasena)
         if not creado:
-            self._mostrar_error(f"El usuario «{nombre_usuario}» ya existe.")
+            self._mostrar_error(T["err_user_exists"].format(nombre_usuario))
             return
 
         nombre_usuario_lower = nombre_usuario.lower()
         clave = crypto.derivar_clave(nombre_usuario_lower, contrasena)
 
-        # Ofrecer migración de tareas legadas si las hay
         if task_store.hay_migracion_pendiente():
             respuesta = messagebox.askyesno(
-                "MisTareas — Importar datos",
-                "Se han encontrado tareas guardadas de una versión anterior.\n\n"
-                "¿Deseas importarlas a tu nueva cuenta?"
+                T["migration_title"], T["migration_msg"]
             )
             if respuesta:
                 tareas_legacy = task_store.obtener_tareas_migracion()
@@ -313,16 +305,38 @@ class VentanaLogin(ctk.CTk):
 
     # ── Helpers ───────────────────────────────────────────────────────────────
 
+    def _mostrar_globo(self, widget, mensaje: str):
+        if hasattr(self, "_globo") and self._globo.winfo_exists():
+            self._globo.destroy()
+
+        globo = tk.Toplevel(self)
+        globo.overrideredirect(True)
+        globo.attributes("-topmost", True)
+        self._globo = globo
+
+        self.update_idletasks()
+        x = widget.winfo_rootx()
+        y = widget.winfo_rooty() + widget.winfo_height() + 4
+
+        fondo = C["text_priority"]
+        frame = tk.Frame(globo, bg=fondo, padx=10, pady=6)
+        frame.pack()
+        tk.Label(frame, text=mensaje, bg=fondo, fg="white",
+                 font=("Segoe UI", 10), justify="left").pack()
+
+        globo.geometry(f"+{x}+{y}")
+        globo.after(3000, lambda: globo.destroy() if globo.winfo_exists() else None)
+        globo.bind("<Button-1>", lambda _: globo.destroy())
+        self.bind("<Button-1>", lambda _: globo.destroy() if globo.winfo_exists() else None, add="+")
+
     def _mostrar_error(self, mensaje: str):
         self._lbl_error.configure(text=mensaje)
 
     def _alternar_visibilidad(self, entrada: ctk.CTkEntry):
-        """Alterna la visibilidad de la contraseña en un campo de entrada."""
         actual = entrada.cget("show")
         entrada.configure(show="" if actual else "•")
 
     def _lanzar_app(self, nombre_usuario: str, clave: bytes):
-        """Destruye la ventana de login y abre la ventana principal de la app."""
         self.destroy()
         from ui.main_window import MisTareasApp
         app = MisTareasApp(nombre_usuario=nombre_usuario, clave=clave)

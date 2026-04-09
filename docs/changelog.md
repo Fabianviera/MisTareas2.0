@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.1.0] — 2026-04-09
+
+### Nuevo
+- **Soporte multiidioma**: la app ahora está disponible en español e inglés; se cambia desde el menú «Idioma / Language»
+- **Globos de error en el registro**: si la contraseña es corta o las dos contraseñas no coinciden, aparece un globo rojo justo debajo del campo con el mensaje de error
+- **Ventana de registro redimensionable**: la ventana se amplía automáticamente (660 px) al pasar al formulario de registro y vuelve a su tamaño original (520 px) al volver al login, para que todos los campos sean siempre visibles
+- **Botón «← Ya tengo cuenta»** siempre visible en la pantalla de creación de cuenta
+
+### Mejorado
+- «v2.0» visible en el pie de la ventana de login y de la ventana principal
+- Código de internacionalización centralizado en `lang.py`
+
+---
+
 ## [2.0.0] — 2026-04-07
 
 ### Nuevo

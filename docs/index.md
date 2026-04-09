@@ -8,6 +8,7 @@
 - **Autenticación segura**: contraseñas protegidas con bcrypt
 - **Tareas cifradas**: archivos de tareas cifrados con Fernet (clave derivada de la contraseña via PBKDF2)
 - **Cambio de usuario**: selector en el pie de la app para cambiar de usuario sin cerrar
+- **Multiidioma**: interfaz disponible en español e inglés (menú «Idioma / Language»)
 - **Gestión completa de tareas**: crear, completar, eliminar y priorizar
 - **Ordenación por arrastre**: reordena tareas arrastrando con el ratón
 - **Timestamps automáticos**: registro de fecha y hora de creación y finalización

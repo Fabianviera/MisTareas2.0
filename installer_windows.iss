@@ -1,6 +1,6 @@
 [Setup]
 AppName=MisTareas 2.0
-AppVersion=2.0
+AppVersion=2.1
 AppPublisher=Juan Fabián Viera Rosales
 AppPublisherURL=https://github.com/Fabianviera/MisTareas2.0
 DefaultDirName={autopf}\MisTareas2.0
