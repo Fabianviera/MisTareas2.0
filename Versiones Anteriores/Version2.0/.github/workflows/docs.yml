@@ -1,0 +1,27 @@
+name: Documentación
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  desplegar-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar MkDocs Material
+        run: pip install mkdocs-material
+
+      - name: Desplegar documentación a GitHub Pages
+        run: mkdocs gh-deploy --force
