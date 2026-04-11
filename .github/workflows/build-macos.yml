@@ -1,0 +1,61 @@
+name: Build macOS
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Configurar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller pillow
+
+      - name: Convertir icon.ico a icon.icns
+        run: |
+          python3 -c "
+          from PIL import Image
+          img = Image.open('icon.ico')
+          img.save('icon.png')
+          "
+          mkdir -p icon.iconset
+          sips -z 16  16  icon.png --out icon.iconset/icon_16x16.png
+          sips -z 32  32  icon.png --out icon.iconset/icon_32x32.png
+          sips -z 64  64  icon.png --out icon.iconset/icon_64x64.png
+          sips -z 128 128 icon.png --out icon.iconset/icon_128x128.png
+          sips -z 256 256 icon.png --out icon.iconset/icon_256x256.png
+          iconutil -c icns icon.iconset --out icon.icns
+
+      - name: Compilar .app con PyInstaller
+        run: pyinstaller MisTareas_mac.spec --noconfirm
+
+      - name: Crear DMG
+        run: |
+          mkdir -p installer
+          hdiutil create \
+            -volname "MisTareas 2.1" \
+            -srcfolder "dist/MisTareas2.1.app" \
+            -ov -format UDZO \
+            "installer/MisTareas2.1.dmg"
+
+      - name: Subir DMG al release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: installer/MisTareas2.1.dmg
