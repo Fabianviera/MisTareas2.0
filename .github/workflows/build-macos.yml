@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag del release al que subir el DMG (ej: v2.1.0)'
+        required: true
+        default: 'v2.1.0'
 
 permissions:
   contents: write
@@ -58,4 +64,5 @@ jobs:
       - name: Subir DMG al release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
           files: installer/MisTareas2.1.dmg
