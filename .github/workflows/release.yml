@@ -22,19 +22,29 @@ jobs:
         with:
           name: "MisTareas 2.0 — ${{ github.ref_name }}"
           body: |
-            ## MisTareas 2.0 — ${{ github.ref_name }}
+            ## MisTareas 2.1 — ${{ github.ref_name }}
 
             ### Descargas
 
-            | Archivo | Descripción |
-            |---------|-------------|
-            | `Installer_MisTareas2.1.exe` | Instalador para Windows (recomendado) |
-            | `MisTareas2.1.exe` | Ejecutable portable (sin instalación) |
+            | Archivo | Plataforma | Descripción |
+            |---------|-----------|-------------|
+            | `Installer_MisTareas2.1.exe` | Windows | Instalador (recomendado) |
+            | `MisTareas2.1.exe` | Windows | Ejecutable portable (sin instalación) |
+            | `MisTareas2.1.dmg` | macOS | Imagen de disco |
 
-            ### Instalación
-            1. Descarga el instalador `Installer_MisTareas2.1.exe`
+            ### Instalación en Windows
+            1. Descarga `Installer_MisTareas2.1.exe`
             2. Ejecuta el instalador y sigue los pasos
-            3. Abre MisTareas 2.0 desde el acceso directo del escritorio
+            3. Abre MisTareas 2.1 desde el acceso directo del escritorio
+
+            > Si Windows muestra "Windows protegió su equipo", haz clic en **"Más información"** → **"Ejecutar de todas formas"**.
+
+            ### Instalación en macOS
+            1. Descarga `MisTareas2.1.dmg`
+            2. Abre el `.dmg` y arrastra `MisTareas2.1.app` a tu carpeta **Aplicaciones**
+            3. Abre la app desde el Launchpad o desde Aplicaciones
+
+            > Si macOS bloquea la app, ve a **Ajustes del Sistema → Privacidad y seguridad** y haz clic en **"Abrir igualmente"**.
 
             ---
             Creado por **Juan Fabián Viera Rosales** · [fabianviera.r@gmail.com](mailto:fabianviera.r@gmail.com)
