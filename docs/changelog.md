@@ -11,6 +11,7 @@
 ### Mejorado
 - «v2.1» visible en el pie de la ventana de login y de la ventana principal
 - Código de internacionalización centralizado en `lang.py`
+- **Distribución para macOS**: imagen de disco `.dmg` generada automáticamente via GitHub Actions
 
 ---
 

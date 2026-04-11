@@ -2,10 +2,11 @@
 
 ## Descargas
 
-| Archivo | Descripción | Enlace |
-|---------|-------------|--------|
-| `Installer_MisTareas2.1.exe` | Instalador para Windows (recomendado) | [Descargar](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/Installer_MisTareas2.1.exe) |
-| `MisTareas2.1.exe` | Ejecutable portable (sin instalación) | [Descargar](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.1.exe) |
+| Archivo | Plataforma | Descripción | Enlace |
+|---------|-----------|-------------|--------|
+| `Installer_MisTareas2.1.exe` | Windows | Instalador (recomendado) | [Descargar](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/Installer_MisTareas2.1.exe) |
+| `MisTareas2.1.exe` | Windows | Ejecutable portable (sin instalación) | [Descargar](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.1.exe) |
+| `MisTareas2.1.dmg` | macOS | Imagen de disco | [Descargar](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.1.dmg) |
 
 ## Windows
 
@@ -40,8 +41,23 @@ python main.py
 
 ## macOS
 
-!!! info "En construcción"
-    El instalador para macOS está en desarrollo. Mientras tanto, usa la opción de código fuente.
+### Opción 1 — DMG (recomendado)
+
+1. Descarga `MisTareas2.1.dmg` desde la tabla anterior o desde la sección [Releases](https://github.com/Fabianviera/MisTareas2.0/releases)
+2. Abre el archivo `.dmg`
+3. Arrastra `MisTareas2.1.app` a tu carpeta **Aplicaciones**
+4. Abre la app desde el Launchpad o desde la carpeta Aplicaciones
+
+!!! warning "Aviso de seguridad de macOS (Gatekeeper)"
+    Al abrir la app por primera vez, macOS puede mostrar el mensaje **"no se puede abrir porque no se puede verificar el desarrollador"**.
+    Esto ocurre porque la app no está firmada con un certificado de Apple. Para continuar:
+
+    1. Ve a **Ajustes del Sistema → Privacidad y seguridad**
+    2. En la sección **Seguridad**, haz clic en **"Abrir igualmente"**
+
+### Opción 2 — Desde el código fuente
+
+Requiere Python 3.10 o superior.
 
 ```bash
 git clone https://github.com/Fabianviera/MisTareas2.0.git

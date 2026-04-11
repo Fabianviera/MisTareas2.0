@@ -17,10 +17,11 @@
 
 ## Descargas
 
-| Archivo | Descripción |
-|---------|-------------|
-| [Installer_MisTareas2.1.exe](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/Installer_MisTareas2.1.exe) | Instalador para Windows (recomendado) |
-| [MisTareas2.1.exe](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.1.exe) | Ejecutable portable (sin instalación) |
+| Archivo | Plataforma | Descripción |
+|---------|-----------|-------------|
+| [Installer_MisTareas2.1.exe](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/Installer_MisTareas2.1.exe) | Windows | Instalador (recomendado) |
+| [MisTareas2.1.exe](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.1.exe) | Windows | Ejecutable portable (sin instalación) |
+| [MisTareas2.1.dmg](https://github.com/Fabianviera/MisTareas2.0/releases/latest/download/MisTareas2.1.dmg) | macOS | Imagen de disco (.dmg) |
 
 ## Novedades respecto a la versión 1.0
 
@@ -41,8 +42,9 @@
 - **CustomTkinter** — interfaz gráfica moderna
 - **bcrypt** — hashing seguro de contraseñas
 - **cryptography** — cifrado Fernet de archivos de tareas
-- **PyInstaller** — compilación a ejecutable
+- **PyInstaller** — compilación a ejecutable (Windows y macOS)
 - **Inno Setup** — instalador Windows
+- **hdiutil** — imagen de disco macOS (.dmg)
 
 ## Capturas de pantalla
 

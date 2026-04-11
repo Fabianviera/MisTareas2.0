@@ -21,9 +21,14 @@ Aplicación de escritorio multi-usuario para gestionar listas de tareas, desarro
 ## Instalación
 
 ### Windows
-Descarga el instalador desde [Releases](https://github.com/Fabianviera/MisTareas2.0/releases).
+Descarga `Installer_MisTareas2.1.exe` desde [Releases](https://github.com/Fabianviera/MisTareas2.0/releases).
 
 > **Aviso SmartScreen**: si Windows muestra "Windows protegió su equipo", haz clic en **"Más información"** → **"Ejecutar de todas formas"**.
+
+### macOS
+Descarga `MisTareas2.1.dmg` desde [Releases](https://github.com/Fabianviera/MisTareas2.0/releases), abre el `.dmg` y arrastra la app a tu carpeta Aplicaciones.
+
+> **Aviso Gatekeeper**: si macOS bloquea la app, ve a **Ajustes del Sistema → Privacidad y seguridad** y haz clic en **"Abrir igualmente"**.
 
 ### Desde el código fuente
 
