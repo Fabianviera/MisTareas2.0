@@ -1,0 +1,1609 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Aplicación de escritorio multi-usuario para gestión de tareas">
+      
+      
+        <meta name="author" content="Fabián Viera">
+      
+      
+        <link rel="canonical" href="https://fabianviera.github.io/MisTareas2.0/referencia/">
+      
+      
+        <link rel="prev" href="../arquitectura/">
+      
+      
+        <link rel="next" href="../changelog/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Referencia del código - MisTareas 2.1</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#referencia-del-codigo" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="MisTareas 2.1" class="md-header__button md-logo" aria-label="MisTareas 2.1" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MisTareas 2.1
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Referencia del código
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Fabianviera/MisTareas2.0" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Fabianviera/MisTareas2.0
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../instalacion/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Instalación
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../uso/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Guía de uso
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../arquitectura/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Arquitectura
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Referencia del código
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MisTareas 2.1" class="md-nav__button md-logo" aria-label="MisTareas 2.1" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    MisTareas 2.1
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Fabianviera/MisTareas2.0" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Fabianviera/MisTareas2.0
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../instalacion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instalación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../uso/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía de uso
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arquitectura/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referencia del código
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referencia del código
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        config.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="config.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_ahora-str" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _ahora() → str
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C: dict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authhasherpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth/hasher.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="auth/hasher.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hash_passwordplain-str-str" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hash_password(plain: str) → str
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verificar_passwordplain-str-hash_guardado-str-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        verificar_password(plain: str, hash_guardado: str) → bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authmodelspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth/models.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="auth/models.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usuario-dataclass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usuario (dataclass)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authstorepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth/store.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="auth/store.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cargar_usuarios-listdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cargar_usuarios() → list[dict]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guardar_usuariosusuarios-listdict-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        guardar_usuarios(usuarios: list[dict]) → None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buscar_usuarionombre_usuario-str-dict-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        buscar_usuario(nombre_usuario: str) → dict | None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crear_usuarionombre_usuario-nombre_mostrar-plain_password-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        crear_usuario(nombre_usuario, nombre_mostrar, plain_password) → bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actualizar_ultimo_loginnombre_usuario-str-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        actualizar_ultimo_login(nombre_usuario: str) → None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#existe_algun_usuario-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        existe_algún_usuario() → bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autenticarnombre_usuario-str-plain_password-str-dict-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        autenticar(nombre_usuario: str, plain_password: str) → dict | None
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datatask_storepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        data/task_store.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="data/task_store.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#obtener_archivo_tareasnombre_usuario-str-str" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        obtener_archivo_tareas(nombre_usuario: str) → str
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guardar_tareastareas-list-nombre_usuario-str-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        guardar_tareas(tareas: list, nombre_usuario: str) → None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cargar_tareasnombre_usuario-str-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cargar_tareas(nombre_usuario: str) → list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hay_migracion_pendiente-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hay_migracion_pendiente() → bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#obtener_tareas_migracion-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        obtener_tareas_migracion() → list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#marcar_migracion_completada-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        marcar_migracion_completada() → None
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uilogin_windowpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ui/login_window.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ui/login_window.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ventanaloginctkctk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VentanaLogin(ctk.CTk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uimain_windowpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ui/main_window.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ui/main_window.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mistareasappctkctk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MisTareasApp(ctk.CTk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        config.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="config.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_ahora-str" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _ahora() → str
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C: dict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authhasherpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth/hasher.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="auth/hasher.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hash_passwordplain-str-str" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hash_password(plain: str) → str
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verificar_passwordplain-str-hash_guardado-str-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        verificar_password(plain: str, hash_guardado: str) → bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authmodelspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth/models.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="auth/models.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usuario-dataclass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usuario (dataclass)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authstorepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth/store.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="auth/store.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cargar_usuarios-listdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cargar_usuarios() → list[dict]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guardar_usuariosusuarios-listdict-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        guardar_usuarios(usuarios: list[dict]) → None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buscar_usuarionombre_usuario-str-dict-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        buscar_usuario(nombre_usuario: str) → dict | None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crear_usuarionombre_usuario-nombre_mostrar-plain_password-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        crear_usuario(nombre_usuario, nombre_mostrar, plain_password) → bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actualizar_ultimo_loginnombre_usuario-str-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        actualizar_ultimo_login(nombre_usuario: str) → None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#existe_algun_usuario-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        existe_algún_usuario() → bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autenticarnombre_usuario-str-plain_password-str-dict-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        autenticar(nombre_usuario: str, plain_password: str) → dict | None
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datatask_storepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        data/task_store.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="data/task_store.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#obtener_archivo_tareasnombre_usuario-str-str" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        obtener_archivo_tareas(nombre_usuario: str) → str
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guardar_tareastareas-list-nombre_usuario-str-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        guardar_tareas(tareas: list, nombre_usuario: str) → None
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cargar_tareasnombre_usuario-str-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cargar_tareas(nombre_usuario: str) → list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hay_migracion_pendiente-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hay_migracion_pendiente() → bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#obtener_tareas_migracion-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        obtener_tareas_migracion() → list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#marcar_migracion_completada-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        marcar_migracion_completada() → None
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uilogin_windowpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ui/login_window.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ui/login_window.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ventanaloginctkctk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VentanaLogin(ctk.CTk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uimain_windowpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ui/main_window.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ui/main_window.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mistareasappctkctk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MisTareasApp(ctk.CTk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="referencia-del-codigo">Referencia del código<a class="headerlink" href="#referencia-del-codigo" title="Permanent link">&para;</a></h1>
+<h2 id="configpy">config.py<a class="headerlink" href="#configpy" title="Permanent link">&para;</a></h2>
+<h3 id="_ahora-str"><code>_ahora() → str</code><a class="headerlink" href="#_ahora-str" title="Permanent link">&para;</a></h3>
+<p>Devuelve la fecha y hora actual como cadena con formato <code>DD/MM/YYYY  HH:MM</code>.</p>
+<h3 id="c-dict"><code>C: dict</code><a class="headerlink" href="#c-dict" title="Permanent link">&para;</a></h3>
+<p>Diccionario con la paleta de colores de la aplicación.</p>
+<table>
+<thead>
+<tr>
+<th>Clave</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bg</code></td>
+<td>Fondo principal de la ventana</td>
+</tr>
+<tr>
+<td><code>header</code></td>
+<td>Fondo de la cabecera</td>
+</tr>
+<tr>
+<td><code>accent</code></td>
+<td>Color de acento (botones principales, checkboxes)</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>Color de texto principal</td>
+</tr>
+<tr>
+<td><code>text_muted</code></td>
+<td>Color de texto secundario/apagado</td>
+</tr>
+<tr>
+<td><code>text_priority</code></td>
+<td>Color de texto para tareas prioritarias</td>
+</tr>
+<tr>
+<td><code>task_bg</code></td>
+<td>Fondo de cada fila de tarea</td>
+</tr>
+<tr>
+<td><code>task_hover</code></td>
+<td>Fondo al pasar el ratón por una tarea</td>
+</tr>
+<tr>
+<td><code>task_priority</code></td>
+<td>Fondo de tareas prioritarias</td>
+</tr>
+<tr>
+<td><code>task_selected</code></td>
+<td>Fondo de la tarea seleccionada</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="authhasherpy">auth/hasher.py<a class="headerlink" href="#authhasherpy" title="Permanent link">&para;</a></h2>
+<h3 id="hash_passwordplain-str-str"><code>hash_password(plain: str) → str</code><a class="headerlink" href="#hash_passwordplain-str-str" title="Permanent link">&para;</a></h3>
+<p>Genera un hash bcrypt con salt automático (rounds=12).</p>
+<h3 id="verificar_passwordplain-str-hash_guardado-str-bool"><code>verificar_password(plain: str, hash_guardado: str) → bool</code><a class="headerlink" href="#verificar_passwordplain-str-hash_guardado-str-bool" title="Permanent link">&para;</a></h3>
+<p>Verifica una contraseña en texto plano contra un hash bcrypt almacenado.</p>
+<hr />
+<h2 id="authmodelspy">auth/models.py<a class="headerlink" href="#authmodelspy" title="Permanent link">&para;</a></h2>
+<h3 id="usuario-dataclass"><code>Usuario</code> (dataclass)<a class="headerlink" href="#usuario-dataclass" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nombre_usuario</code></td>
+<td><code>str</code></td>
+<td>Identificador único (minúsculas)</td>
+</tr>
+<tr>
+<td><code>nombre_mostrar</code></td>
+<td><code>str</code></td>
+<td>Nombre visible en la UI</td>
+</tr>
+<tr>
+<td><code>hash_password</code></td>
+<td><code>str</code></td>
+<td>Hash bcrypt de la contraseña</td>
+</tr>
+<tr>
+<td><code>creado_el</code></td>
+<td><code>str</code></td>
+<td>Fecha de creación</td>
+</tr>
+<tr>
+<td><code>ultimo_login</code></td>
+<td><code>str</code></td>
+<td>Fecha del último acceso</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="authstorepy">auth/store.py<a class="headerlink" href="#authstorepy" title="Permanent link">&para;</a></h2>
+<h3 id="cargar_usuarios-listdict"><code>cargar_usuarios() → list[dict]</code><a class="headerlink" href="#cargar_usuarios-listdict" title="Permanent link">&para;</a></h3>
+<p>Carga todos los usuarios desde <code>users_data/users.json</code>. Devuelve lista vacía si no existe.</p>
+<h3 id="guardar_usuariosusuarios-listdict-none"><code>guardar_usuarios(usuarios: list[dict]) → None</code><a class="headerlink" href="#guardar_usuariosusuarios-listdict-none" title="Permanent link">&para;</a></h3>
+<p>Guarda la lista de usuarios con escritura atómica.</p>
+<h3 id="buscar_usuarionombre_usuario-str-dict-none"><code>buscar_usuario(nombre_usuario: str) → dict | None</code><a class="headerlink" href="#buscar_usuarionombre_usuario-str-dict-none" title="Permanent link">&para;</a></h3>
+<p>Busca un usuario por nombre (insensible a mayúsculas). Devuelve <code>None</code> si no existe.</p>
+<h3 id="crear_usuarionombre_usuario-nombre_mostrar-plain_password-bool"><code>crear_usuario(nombre_usuario, nombre_mostrar, plain_password) → bool</code><a class="headerlink" href="#crear_usuarionombre_usuario-nombre_mostrar-plain_password-bool" title="Permanent link">&para;</a></h3>
+<p>Crea un nuevo usuario con la contraseña hasheada. Devuelve <code>False</code> si el usuario ya existe.</p>
+<h3 id="actualizar_ultimo_loginnombre_usuario-str-none"><code>actualizar_ultimo_login(nombre_usuario: str) → None</code><a class="headerlink" href="#actualizar_ultimo_loginnombre_usuario-str-none" title="Permanent link">&para;</a></h3>
+<p>Actualiza la marca de tiempo del último login.</p>
+<h3 id="existe_algun_usuario-bool"><code>existe_algún_usuario() → bool</code><a class="headerlink" href="#existe_algun_usuario-bool" title="Permanent link">&para;</a></h3>
+<p>Comprueba si hay al menos un usuario registrado.</p>
+<h3 id="autenticarnombre_usuario-str-plain_password-str-dict-none"><code>autenticar(nombre_usuario: str, plain_password: str) → dict | None</code><a class="headerlink" href="#autenticarnombre_usuario-str-plain_password-str-dict-none" title="Permanent link">&para;</a></h3>
+<p>Autentica al usuario. Devuelve el dict del usuario si las credenciales son correctas, <code>None</code> en caso contrario.</p>
+<hr />
+<h2 id="datatask_storepy">data/task_store.py<a class="headerlink" href="#datatask_storepy" title="Permanent link">&para;</a></h2>
+<h3 id="obtener_archivo_tareasnombre_usuario-str-str"><code>obtener_archivo_tareas(nombre_usuario: str) → str</code><a class="headerlink" href="#obtener_archivo_tareasnombre_usuario-str-str" title="Permanent link">&para;</a></h3>
+<p>Devuelve la ruta completa al archivo de tareas del usuario, creando el directorio si no existe.</p>
+<h3 id="guardar_tareastareas-list-nombre_usuario-str-none"><code>guardar_tareas(tareas: list, nombre_usuario: str) → None</code><a class="headerlink" href="#guardar_tareastareas-list-nombre_usuario-str-none" title="Permanent link">&para;</a></h3>
+<p>Guarda la lista de tareas con escritura atómica mediante archivo <code>.tmp</code> + <code>os.replace()</code>.</p>
+<h3 id="cargar_tareasnombre_usuario-str-list"><code>cargar_tareas(nombre_usuario: str) → list</code><a class="headerlink" href="#cargar_tareasnombre_usuario-str-list" title="Permanent link">&para;</a></h3>
+<p>Carga las tareas del usuario. Si no existen pero hay un <code>tasks.json</code> legado, lo copia a <code>users_data/pendiente_migracion.json</code> para ofrecerlo durante el registro.</p>
+<h3 id="hay_migracion_pendiente-bool"><code>hay_migracion_pendiente() → bool</code><a class="headerlink" href="#hay_migracion_pendiente-bool" title="Permanent link">&para;</a></h3>
+<p>Comprueba si existe <code>users_data/pendiente_migracion.json</code>.</p>
+<h3 id="obtener_tareas_migracion-list"><code>obtener_tareas_migracion() → list</code><a class="headerlink" href="#obtener_tareas_migracion-list" title="Permanent link">&para;</a></h3>
+<p>Devuelve las tareas legadas pendientes de migración.</p>
+<h3 id="marcar_migracion_completada-none"><code>marcar_migracion_completada() → None</code><a class="headerlink" href="#marcar_migracion_completada-none" title="Permanent link">&para;</a></h3>
+<p>Elimina el archivo <code>pendiente_migracion.json</code>.</p>
+<hr />
+<h2 id="uilogin_windowpy">ui/login_window.py<a class="headerlink" href="#uilogin_windowpy" title="Permanent link">&para;</a></h2>
+<h3 id="ventanaloginctkctk"><code>VentanaLogin(ctk.CTk)</code><a class="headerlink" href="#ventanaloginctkctk" title="Permanent link">&para;</a></h3>
+<p>Ventana raíz de la aplicación. Gestiona dos estados internos: <code>"login"</code> y <code>"registro"</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_construir_ui()</code></td>
+<td>Construye todos los widgets (se llama una sola vez)</td>
+</tr>
+<tr>
+<td><code>_mostrar_estado_login()</code></td>
+<td>Muestra el formulario de acceso</td>
+</tr>
+<tr>
+<td><code>_mostrar_estado_registro()</code></td>
+<td>Muestra el formulario de creación de cuenta</td>
+</tr>
+<tr>
+<td><code>_cambiar_estado()</code></td>
+<td>Alterna entre login y registro</td>
+</tr>
+<tr>
+<td><code>_intentar_login()</code></td>
+<td>Valida y ejecuta el login</td>
+</tr>
+<tr>
+<td><code>_intentar_registro()</code></td>
+<td>Valida y ejecuta el registro</td>
+</tr>
+<tr>
+<td><code>_alternar_visibilidad(entrada)</code></td>
+<td>Muestra/oculta la contraseña en un campo</td>
+</tr>
+<tr>
+<td><code>_lanzar_app(nombre_usuario)</code></td>
+<td>Destruye el login y lanza <code>MisTareasApp</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="uimain_windowpy">ui/main_window.py<a class="headerlink" href="#uimain_windowpy" title="Permanent link">&para;</a></h2>
+<h3 id="mistareasappctkctk"><code>MisTareasApp(ctk.CTk)</code><a class="headerlink" href="#mistareasappctkctk" title="Permanent link">&para;</a></h3>
+<p>Ventana principal. Recibe <code>nombre_usuario: str</code> en el constructor.</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_construir_ui()</code></td>
+<td>Construye cabecera, entrada y lista</td>
+</tr>
+<tr>
+<td><code>_construir_barra_menus()</code></td>
+<td>Barra de menús (diferenciada por plataforma)</td>
+</tr>
+<tr>
+<td><code>_añadir_tarea()</code></td>
+<td>Añade una nueva tarea (máx. 200 caracteres)</td>
+</tr>
+<tr>
+<td><code>_alternar_tarea(indice, var)</code></td>
+<td>Marca/desmarca una tarea como completada</td>
+</tr>
+<tr>
+<td><code>_eliminar_tarea(indice)</code></td>
+<td>Elimina una tarea</td>
+</tr>
+<tr>
+<td><code>_alternar_prioridad(indice)</code></td>
+<td>Activa/desactiva la prioridad de una tarea</td>
+</tr>
+<tr>
+<td><code>_seleccionar_tarea(indice)</code></td>
+<td>Selecciona una tarea (actualiza colores en sitio)</td>
+</tr>
+<tr>
+<td><code>_mover_seleccionada(direccion)</code></td>
+<td>Mueve la tarea seleccionada con teclado</td>
+</tr>
+<tr>
+<td><code>_iniciar_arrastre(event, indice)</code></td>
+<td>Inicia el drag &amp; drop</td>
+</tr>
+<tr>
+<td><code>_bucle_anim_fantasma()</code></td>
+<td>Bucle a ~60fps para el ghost window durante el arrastre</td>
+</tr>
+<tr>
+<td><code>_iniciar_anim_hueco(nuevo_idx)</code></td>
+<td>Animación de apertura de hueco al arrastrar</td>
+</tr>
+<tr>
+<td><code>_fin_arrastre(event)</code></td>
+<td>Finaliza el arrastre y reordena</td>
+</tr>
+<tr>
+<td><code>_renderizar_tareas()</code></td>
+<td>Reconstruye todos los widgets de la lista</td>
+</tr>
+<tr>
+<td><code>_guardar_tareas()</code></td>
+<td>Persiste las tareas (escritura atómica)</td>
+</tr>
+<tr>
+<td><code>_cargar_tareas()</code></td>
+<td>Carga las tareas del usuario actual</td>
+</tr>
+<tr>
+<td><code>_cerrar_sesion()</code></td>
+<td>Destruye la app y relanza <code>VentanaLogin</code></td>
+</tr>
+<tr>
+<td><code>_salir()</code></td>
+<td>Guarda y cierra la aplicación</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
