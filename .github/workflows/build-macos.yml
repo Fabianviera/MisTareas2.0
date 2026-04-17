@@ -52,14 +52,23 @@ jobs:
       - name: Compilar .app con PyInstaller
         run: pyinstaller MisTareas_mac.spec --noconfirm
 
+      - name: Instalar create-dmg
+        run: brew install create-dmg
+
       - name: Crear DMG
         run: |
           mkdir -p installer
-          hdiutil create \
-            -volname "MisTareas 2.1" \
-            -srcfolder "dist/MisTareas2.1.app" \
-            -ov -format UDZO \
-            "installer/MisTareas2.1.dmg"
+          create-dmg \
+            --volname "MisTareas 2.1" \
+            --volicon "icon.icns" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 128 \
+            --icon "MisTareas2.1.app" 150 185 \
+            --hide-extension "MisTareas2.1.app" \
+            --app-drop-link 450 185 \
+            "installer/MisTareas2.1.dmg" \
+            "dist/MisTareas2.1.app"
 
       - name: Subir DMG al release
         uses: softprops/action-gh-release@v2

@@ -40,7 +40,8 @@ C = {
 # ── Rutas base ────────────────────────────────────────────────────────────────
 
 if getattr(sys, 'frozen', False):
-    DIR_BASE = os.path.dirname(sys.executable)
+    DIR_BASE = os.path.join(os.path.expanduser("~"), "Library", "Application Support", "MisTareas")
+    os.makedirs(DIR_BASE, exist_ok=True)
 else:
     DIR_BASE = os.path.dirname(os.path.abspath(__file__))
 
